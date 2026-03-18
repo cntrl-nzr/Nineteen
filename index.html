@@ -467,45 +467,6 @@ nextArrow.addEventListener('click', () => {
 });
  
 </script>
-<script>
-let touchStartX = 0;
-let touchEndX = 0;
 
-const swipeThreshold = 50; // minimum distance to count as a swipe
-
-document.addEventListener('touchstart', (e) => {
-  touchStartX = e.changedTouches[0].screenX;
-});
-
-document.addEventListener('touchend', (e) => {
-  touchEndX = e.changedTouches[0].screenX;
-  handleSwipe();
-});
-
-function handleSwipe() {
-  const distance = touchEndX - touchStartX;
-
-  if (Math.abs(distance) > swipeThreshold) {
-    if (distance < 0) {
-      // Swiped left → next page
-      if (currentPage !== 40) {
-        if (currentPage === 18) {
-          currentPage = 20;
-        }
-        currentPage += 2;
-        updatePages();
-      }
-    } else {
-      // Swiped right → previous page
-      if (currentPage === 22) {
-        currentPage = 20;
-      }
-      if (currentPage > 0) {
-        currentPage -= 2;
-        updatePages();
-      }
-    }
-  }
-}</script>
 </body>
 </html>
