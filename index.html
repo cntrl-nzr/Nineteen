@@ -43,7 +43,6 @@ body {
   transform: rotateX(180deg);
 }
 
-/* speech bubble */
 #bubble {
   position: absolute;
   padding: 8px 12px;
@@ -102,7 +101,6 @@ body {
   font-size: 18px;
   cursor: pointer;
 }
-
 </style>
 </head>
 <body>
@@ -139,66 +137,63 @@ const overlay = document.getElementById('overlay');
 const closeBtn = document.getElementById('close');
 const bubble = document.getElementById('bubble');
 
-// center start
 let centerX = window.innerWidth / 2;
 let centerY = window.innerHeight / 2;
 let angle = 0;
 let radius = 40;
 
-// messages
 const messages = [
   "...someone will read me",
-  "I shouldn't be here",
-  "a secret waits inside"
+  "don't touch me im ticklish",
+  "a message waits inside",
+  "how did you find me",
+  "i'm a talking envelope"
 ];
 
-// movement
 function animate() {
   angle += 0.01;
   radius += Math.sin(angle * 0.5) * 0.1;
 
+  // calculate new position
   let x = centerX + Math.cos(angle) * radius;
   let y = centerY + Math.sin(angle) * radius;
+
+  // clamp within viewport
+  const envWidth = env.offsetWidth;
+  const envHeight = env.offsetHeight;
+
+  x = Math.max(0, Math.min(window.innerWidth - envWidth, x));
+  y = Math.max(0, Math.min(window.innerHeight - envHeight, y));
 
   env.style.left = x + 'px';
   env.style.top = y + 'px';
 
   env.style.transform = `rotate(${Math.sin(angle) * 10}deg)`;
 
-  // bubble follows
-  bubble.style.left = x + 85 + 'px';
+  bubble.style.left = x + envWidth / 2 + 'px';
   bubble.style.top = y + 'px';
 
   requestAnimationFrame(animate);
 }
 animate();
 
-// random thoughts
 function randomMessage() {
   const msg = messages[Math.floor(Math.random() * messages.length)];
   bubble.textContent = msg;
   bubble.style.opacity = 1;
-
-  setTimeout(() => {
-    bubble.style.opacity = 0;
-  }, 2000);
+  setTimeout(() => { bubble.style.opacity = 0; }, 2000);
 }
-
 setInterval(randomMessage, 4000);
 
-// open on click
 env.addEventListener('click', () => {
   env.classList.add('open');
-  setTimeout(() => {
-    overlay.style.display = 'flex';
-  }, 500);
+  setTimeout(() => { overlay.style.display = 'flex'; }, 500);
 });
 
 closeBtn.addEventListener('click', () => {
   overlay.style.display = 'none';
   env.classList.remove('open');
 });
-
 </script>
 
 </body>
