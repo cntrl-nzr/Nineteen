@@ -162,21 +162,23 @@ body {
 }
 
 .arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 36px;
-  color: white;
-  background: rgba(0,0,0,0.3);
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  z-index: 20;
-  user-select: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 36px;
+    color: white;
+    background: rgba(0, 0, 0, 0.3);
+    /* border-radius: 50%; */
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 20;
+    user-select: none;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 #prevArrow {
@@ -369,8 +371,12 @@ function generateLines(){
 }
 
 function updatePages(){
-
-  if(currentPage === 18){
+  if(currentPage === 40)
+  {
+      leftPage.innerHTML = generateLines(18) + '<div class="pageNumber">40</div>';
+      rightPage.innerHTML = `<div class="Page0">End</div>` + `<div class="pageNumber">end</div>`;
+  }
+  else if(currentPage === 18){
     leftPage.innerHTML = generateLines(18) + '<div class="pageNumber">18</div>';
     rightPage.innerHTML = generateLines(18) + '<div class="pageNumber">21</div>';
     rightPage.classList.add('ripped');
@@ -411,10 +417,15 @@ prevArrow.addEventListener('click', ()=>{
   }
 });
 
-nextArrow.addEventListener('click', ()=>{
-  if(currentPage === 18) { currentPage = 20}
-  currentPage += 2;
-  updatePages();
+nextArrow.addEventListener('click', () => {
+  if (currentPage !== 40) {
+    if (currentPage === 18) {
+      currentPage = 20;
+    } else {
+      currentPage += 2;
+    }
+    updatePages();
+  }
 });
 </script>
 
