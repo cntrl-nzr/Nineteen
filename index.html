@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mystery Envelope Physics</title>
+<title>Mystery Envelope</title>
 <style>
 body {
   margin: 0;
@@ -13,56 +13,11 @@ body {
   font-family: serif;
 }
 
-/* MENU BUTTON */
-#menuBtn {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  width: 40px;
-  height: 40px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: white;
-  cursor: pointer;
-  z-index: 1000;
-}
-
-/* PROPER HIDDEN MENU */
-#menu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 220px;
-  height: 100%;
-  background: rgba(0,0,0,0.95);
-  transform: translateX(-100%);
-  opacity: 0;
-  pointer-events: none;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  padding: 20px;
-  color: white;
-  z-index: 999;
-}
-
-#menu.open {
-  transform: translateX(0);
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.menu-item {
-  margin: 15px 0;
-  cursor: pointer;
-  padding: 8px;
-  border: 1px solid rgba(255,255,255,0.2);
-}
-
 #envelope {
   position: absolute;
   width: 170px;
   height: 115px;
-  cursor: grab;
-  transform: rotate(0deg);
+  cursor: pointer;
   filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8));
 }
 
@@ -86,6 +41,31 @@ body {
 
 #envelope.open .flap {
   transform: rotateX(180deg);
+}
+
+/* speech bubble */
+#bubble {
+  position: absolute;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.9);
+  color: #111;
+  font-size: 12px;
+  border-radius: 10px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -120%);
+  transition: opacity 0.4s ease;
+}
+
+#bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(255,255,255,0.9);
 }
 
 #overlay {
@@ -127,17 +107,12 @@ body {
 </head>
 <body>
 
-<button id="menuBtn">≡</button>
-
-<div id="menu">
-  <div class="menu-item" id="openMsg">Open Message</div>
-  <div class="menu-item" id="closeMenu">Close Menu</div>
-</div>
-
 <div id="envelope">
   <div class="body"></div>
   <div class="flap"></div>
 </div>
+
+<div id="bubble"></div>
 
 <div id="overlay">
   <div id="letter">
@@ -162,124 +137,61 @@ body {
 const env = document.getElementById('envelope');
 const overlay = document.getElementById('overlay');
 const closeBtn = document.getElementById('close');
-const menu = document.getElementById('menu');
-const menuBtn = document.getElementById('menuBtn');
-const openMsg = document.getElementById('openMsg');
-const closeMenu = document.getElementById('closeMenu');
+const bubble = document.getElementById('bubble');
 
-menuBtn.onclick = () => menu.classList.toggle('open');
-closeMenu.onclick = () => menu.classList.remove('open');
-
-openMsg.onclick = () => {
-  env.classList.add('open');
-  overlay.style.display = 'flex';
-  menu.classList.remove('open');
-};
-
-let isDragging = false;
-let vx = 0, vy = 0;
-let lastX, lastY;
-
-// center + spiral motion
+// center start
 let centerX = window.innerWidth / 2;
 let centerY = window.innerHeight / 2;
 let angle = 0;
-let radius = 20;
+let radius = 40;
 
-// start exactly center
-env.style.left = centerX + 'px';
-env.style.top = centerY + 'px';
+// messages
+const messages = [
+  "...someone will read me",
+  "I shouldn't be here",
+  "a secret waits inside"
+];
 
-function getPos(e) {
-  return e.touches ? e.touches[0] : e;
-}
-
-env.addEventListener('mousedown', start);
-env.addEventListener('touchstart', start);
-
-document.addEventListener('mousemove', move);
-document.addEventListener('touchmove', move);
-
-document.addEventListener('mouseup', end);
-document.addEventListener('touchend', end);
-
-function start(e) {
-  isDragging = true;
-  const p = getPos(e);
-  lastX = p.clientX;
-  lastY = p.clientY;
-}
-
-function move(e) {
-  if (!isDragging) return;
-  const p = getPos(e);
-
-  vx = p.clientX - lastX;
-  vy = p.clientY - lastY;
-
-  env.style.left = env.offsetLeft + vx + 'px';
-  env.style.top = env.offsetTop + vy + 'px';
-
-  lastX = p.clientX;
-  lastY = p.clientY;
-}
-
-function end() {
-  isDragging = false;
-}
-
+// movement
 function animate() {
-  if (!isDragging) {
-    // spiral idle motion
-    angle += 0.01;
-    radius += Math.sin(angle * 0.5) * 0.05;
+  angle += 0.01;
+  radius += Math.sin(angle * 0.5) * 0.1;
 
-    let targetX = centerX + Math.cos(angle) * radius;
-    let targetY = centerY + Math.sin(angle) * radius;
+  let x = centerX + Math.cos(angle) * radius;
+  let y = centerY + Math.sin(angle) * radius;
 
-    let dx = targetX - env.offsetLeft;
-    let dy = targetY - env.offsetTop;
+  env.style.left = x + 'px';
+  env.style.top = y + 'px';
 
-    vx += dx * 0.002;
-    vy += dy * 0.002;
+  env.style.transform = `rotate(${Math.sin(angle) * 10}deg)`;
 
-    let x = env.offsetLeft + vx;
-    let y = env.offsetTop + vy;
+  // bubble follows
+  bubble.style.left = x + 85 + 'px';
+  bubble.style.top = y + 'px';
 
-    if (x <= 0 || x + env.offsetWidth >= window.innerWidth) {
-      vx *= -0.85;
-      x = Math.max(0, Math.min(window.innerWidth - env.offsetWidth, x));
-    }
-
-    if (y <= 0 || y + env.offsetHeight >= window.innerHeight) {
-      vy *= -0.85;
-      y = Math.max(0, Math.min(window.innerHeight - env.offsetHeight, y));
-    }
-
-    env.style.left = x + 'px';
-    env.style.top = y + 'px';
-
-    vx *= 0.98;
-    vy *= 0.98;
-
-    const rot = vx * 0.3;
-    env.style.transform = `rotate(${rot}deg)`;
-  }
   requestAnimationFrame(animate);
 }
 animate();
 
-let moved = false;
-env.addEventListener('mousemove', () => moved = true);
+// random thoughts
+function randomMessage() {
+  const msg = messages[Math.floor(Math.random() * messages.length)];
+  bubble.textContent = msg;
+  bubble.style.opacity = 1;
 
+  setTimeout(() => {
+    bubble.style.opacity = 0;
+  }, 2000);
+}
+
+setInterval(randomMessage, 4000);
+
+// open on click
 env.addEventListener('click', () => {
-  if (!moved) {
-    env.classList.add('open');
-    setTimeout(() => {
-      overlay.style.display = 'flex';
-    }, 500);
-  }
-  moved = false;
+  env.classList.add('open');
+  setTimeout(() => {
+    overlay.style.display = 'flex';
+  }, 500);
 });
 
 closeBtn.addEventListener('click', () => {
