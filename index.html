@@ -334,7 +334,7 @@ const funnyBibleLines = [
   "lalalalalaalalalalalalalalala.",
   "eartoo will guide his people.",
   "computers will never have souls.",
-  "im bored should i create a new species.",
+  "im bored should i create new species.",
   "how dare they start wars.",
   "xxxxxxxxxxxxxxx.",
   "aaaaaaaaaaaaaaa.",
@@ -347,7 +347,10 @@ const funnyBibleLines = [
   "fkudsafhgdsafdsgjkagdhf.",
   "x x x x x x  x x x x x x .",
   "x x x x x x  x x x x x x .",
-  "x x x x x x  x x x x x x ."
+  "x x x x x x  x x x x x x .",
+  "my favourite song is.. ",
+  "do people actually believe in me? ",
+  "who created me if im god? "
 ];
 
 function getRandomLine(){
@@ -358,7 +361,7 @@ function getRandomLine(){
 function generateLines(){
   let content = '';
   // Random number of lines between 30 and 50
- const num = Math.floor(Math.random() * 5) + 1;
+ const num = Math.floor(Math.random() * 8) + 1;
   for(let i=0;i<num;i++){
     content += `<div>${getRandomLine()}</div>`;
   }
