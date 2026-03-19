@@ -25,14 +25,15 @@ body {
   margin: 0;
   height: 100vh;
   background: radial-gradient(circle at center, #1a1a1a, #000000);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y:scroll;
   font-family: serif;
 }
 
 #envelope {
   position: absolute;
-  width: 170px;
-  height: 115px;
+  width: 150px;
+  height: 105px;
   cursor: pointer;
   filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8));
 }
@@ -95,7 +96,7 @@ body {
 #letter {
   width: 360px;
   background: #f8f3e6;
-  padding: 28px;
+  padding: 20px;
   box-shadow: 0 25px 60px rgba(0,0,0,0.85);
   position: relative;
   animation: pop 0.35s ease;
@@ -109,9 +110,7 @@ body {
 }
 
 #close {
-  position: absolute;
-  top: 8px;
-  right: 12px;
+  float:right;
   border: none;
   background: transparent;
   font-size: 18px;
