@@ -69,7 +69,7 @@ body {
   height: 100%;
   background: linear-gradient(145deg, #7a4e2b 0%, #4a2f1a 100%);
   border-radius: 8px;
-  z-index: -1;
+  z-index: -50;
   transform: translateZ(-6px);
 }
 #bookClosed::after {
@@ -81,7 +81,7 @@ body {
   height: 100%;
   background: linear-gradient(145deg, #6a3d1a 0%, #3a2510 100%);
   border-radius: 8px;
-  z-index: -2;
+  z-index: -50;
   transform: translateZ(-12px);
 }
 
@@ -130,7 +130,7 @@ body {
 
 .page.right {
   border-left: 2px solid #b59e7d;
-  z-index: 1;
+  z-index: 2;
   position: relative;
   background: #fef5e0;
 }
@@ -145,7 +145,7 @@ body {
     background: repeating-linear-gradient(174deg, rgb(0 0 0) 0, rgb(255 255 255) 4px, #00000000 5px);
     clip-path: polygon(0% 0%, 95% 0%, 100% 5%, 85% 10%, 92% 20%, 80% 30%, 90% 40%, 75% 50%, 85% 60%, 70% 70%, 80% 80%, 60% 90%, 75% 100%, 0% 100%);
     transform: rotate(2deg);
-    z-index: 2;
+    z-index: 3;
 }
 
 #behindPage {
@@ -171,7 +171,7 @@ body {
   border: none;
   cursor: pointer;
   color: red;
-  z-index: 10;
+  z-index: 50;
 }
 
 .arrow {
@@ -494,7 +494,7 @@ nextArrow.addEventListener('click', () => {
   height: 100%;
   background: linear-gradient(to bottom, #0a0a1a, #1a1a3a);
   overflow: hidden;
-  z-index: -1;
+  z-index: -50;
   font-family: sans-serif;
 }
 
