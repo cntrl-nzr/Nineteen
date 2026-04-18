@@ -154,31 +154,35 @@ const closeBtn = document.getElementById('close');
 const bubble = document.getElementById('bubble');
 
 let centerX = window.innerWidth / 3;
-let centerY = window.innerHeight /3;
+let centerY = window.innerHeight / 3;
 let angle = 0;
 let radius = 40;
 
+// message list
 const messages = [
+  "how did you find me",
   "i cant stop spinning",
   "don't touch me im ticklish omg",
   "wow you actually found me",
-  "how did you find me",
   "i've been waiting",
   "i'm a talking envelope dafu u lookin at"
 ];
 
+// index for sequential messages
+let messageIndex = 0;
+
+// animation loop
 function animate() {
   angle += 0.01;
   radius += Math.sin(angle * 0.5) * 0.1;
 
-  // calculate new position
   let x = centerX + Math.cos(angle) * radius;
   let y = centerY + Math.sin(angle) * radius;
 
-  // clamp within viewport
   const envWidth = env.offsetWidth;
   const envHeight = env.offsetHeight;
 
+  // keep inside screen
   x = Math.max(0, Math.min(window.innerWidth - envWidth, x));
   y = Math.max(0, Math.min(window.innerHeight - envHeight, y));
 
@@ -194,17 +198,28 @@ function animate() {
 }
 animate();
 
-function randomMessage() {
-  const msg = messages[Math.floor(Math.random() * messages.length)];
-  bubble.textContent = msg;
+// sequential message loop
+function nextMessage() {
+  bubble.textContent = messages[messageIndex];
   bubble.style.opacity = 1;
-  setTimeout(() => { bubble.style.opacity = 0; }, 2000);
-}
-setInterval(randomMessage, 4000);
 
+  setTimeout(() => {
+    bubble.style.opacity = 0;
+  }, 2000);
+
+  // advance and loop
+  messageIndex = (messageIndex + 1) % messages.length;
+}
+
+// run every 4 seconds
+setInterval(nextMessage, 4000);
+
+// click handlers
 env.addEventListener('click', () => {
   env.classList.add('open');
-  setTimeout(() => { overlay.style.display = 'flex'; }, 500);
+  setTimeout(() => {
+    overlay.style.display = 'flex';
+  }, 500);
 });
 
 closeBtn.addEventListener('click', () => {
@@ -212,6 +227,112 @@ closeBtn.addEventListener('click', () => {
   env.classList.remove('open');
 });
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+.sparkle-digit {
+  position: fixed;
+  pointer-events: none;
+  font-size: 10px;
+  font-weight: bold;
+  opacity: 0.95;
+  user-select: none;
+  animation: digitFade 0.9s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes digitFade {
+  0% {
+    transform: scale(1) translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.4) translate(var(--dx), var(--dy)) rotate(var(--rot));
+    opacity: 0;
+  }
+}
+</style>
+
+<script>
+function randomColor() {
+  const colors = [
+    "#ff9ecb", // light pink
+    "#ffb38a", // soft orange
+    "#8ad6ff", // light blue
+    "#a8ffb0"  // light green
+  ];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function randomDigit() {
+  return Math.random() > 0.5 ? "1" : "9";
+}
+
+function createDigit(x, y) {
+  const el = document.createElement('div');
+  el.className = 'sparkle-digit';
+
+  el.textContent = randomDigit();
+  el.style.color = randomColor();
+
+  const dx = (Math.random() - 0.5) * 80 + 'px';
+  const dy = (Math.random() - 0.5) * 80 + 'px';
+  const rot = (Math.random() * 180 - 90) + 'deg';
+
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  el.style.setProperty('--dx', dx);
+  el.style.setProperty('--dy', dy);
+  el.style.setProperty('--rot', rot);
+
+  document.body.appendChild(el);
+
+  setTimeout(() => el.remove(), 900);
+}
+
+// throttle for performance
+let lastTime = 0;
+
+function handleMove(x, y) {
+  const now = Date.now();
+  if (now - lastTime < 25) return;
+  lastTime = now;
+
+  createDigit(x, y);
+}
+
+// mouse
+document.addEventListener('mousemove', (e) => {
+  handleMove(e.clientX, e.clientY);
+});
+
+// touch
+document.addEventListener('touchmove', (e) => {
+  const t = e.touches[0];
+  handleMove(t.clientX, t.clientY);
+});
+</script>
+
+
+
+
+
 
 </body>
 </html>
