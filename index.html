@@ -314,7 +314,7 @@ function updatePages(){
     rightPage.classList.add('ripped');
     behindPage.style.display = 'block';
     behindPage.innerHTML = generateLines(18) + '<div class="pageNumber">22</div>';
-	  MyAlert("Page 19 is nowhere to be found… I wonder where it went");
+	  MyAlert("Page 19 is nowhere to be found… I wonder where it went, have you seen it?");
   } else {
 	  if(currentPage === 0)
 	  { leftPage.innerHTML = `<div class="Page0">Written By God</div>` + `<div class="pageNumber">${currentPage}</div>`;
@@ -393,7 +393,7 @@ nextArrow.addEventListener('click', () => {
   Object.assign(alertBox.style, {
     position: 'fixed',
     left: '50%',
-    top: '50%', // start center
+    top: '50%',
     transform: 'translate(-50%, -50%) scale(0.9)',
     padding: '14px 22px',
     borderRadius: '16px',
@@ -420,26 +420,16 @@ nextArrow.addEventListener('click', () => {
     alertBox.style.transform = 'translate(-50%, -50%) scale(1)';
   });
 
-  // move to 25% after a short delay
+  // move to 25% and STOP there
   setTimeout(() => {
     alertBox.style.top = '25%';
     alertBox.style.transform = 'translate(-50%, 0%) scale(1)';
   }, 300);
 
-  // floating effect
-  let offset = 0;
-  const float = setInterval(() => {
-    offset += 0.5;
-    alertBox.style.transform =
-      `translate(-50%, calc(0% + ${Math.sin(offset) * 5}px)) scale(1)`;
-  }, 30);
-
   // remove after 2s
   setTimeout(() => {
     alertBox.style.opacity = '0';
     alertBox.style.transform = 'translate(-50%, -20px) scale(0.9)';
-
-    clearInterval(float);
 
     setTimeout(() => alertBox.remove(), 500);
   }, 2000);
