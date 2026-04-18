@@ -293,6 +293,7 @@ function updatePages(){
     rightPage.classList.add('ripped');
     behindPage.style.display = 'block';
     behindPage.innerHTML = generateLines(18) + '<div class="pageNumber">22</div>';
+	  MyAlert("Page 19 is nowhere to be found… I wonder where it went");
   } else {
 	  if(currentPage === 0)
 	  { leftPage.innerHTML = `<div class="Page0">Written By God</div>` + `<div class="pageNumber">${currentPage}</div>`;
@@ -362,7 +363,62 @@ nextArrow.addEventListener('click', () => {
     updatePages();
   }
 });
- 
+ function MyAlert(message) {
+  const alertBox = document.createElement('div');
+  alertBox.textContent = message;
+
+  // base style
+  Object.assign(alertBox.style, {
+    position: 'fixed',
+    top: '25%',
+    left: '50%',
+    transform: 'translate(-50%, -50%) scale(0.9)',
+    padding: '14px 22px',
+    borderRadius: '16px',
+    fontSize: '14px',
+    fontFamily: 'serif',
+    color: '#fff',
+    zIndex: '9999',
+    opacity: '0',
+    transition: 'all 0.5s ease',
+
+    // dreamy visuals
+    background: 'rgba(255, 255, 255, 0.08)',
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
+    border: '1px solid rgba(255,255,255,0.2)',
+    boxShadow: '0 0 25px rgba(255,180,255,0.3), 0 0 50px rgba(120,180,255,0.2)',
+    textShadow: '0 0 8px rgba(255,255,255,0.6)'
+  });
+
+  document.body.appendChild(alertBox);
+
+  // animate in
+  requestAnimationFrame(() => {
+    alertBox.style.opacity = '1';
+    alertBox.style.transform = 'translate(-50%, -50%) scale(1)';
+  });
+
+  // subtle floating motion
+  let offset = 0;
+  const float = setInterval(() => {
+    offset += 0.5;
+    alertBox.style.transform =
+      `translate(-50%, calc(-50% + ${Math.sin(offset) * 5}px)) scale(1)`;
+  }, 30);
+
+  // remove after 2s
+  setTimeout(() => {
+    alertBox.style.opacity = '0';
+    alertBox.style.transform = 'translate(-50%, -50%) scale(0.9)';
+
+    clearInterval(float);
+
+    setTimeout(() => {
+      alertBox.remove();
+    }, 500);
+  }, 2000);
+}
 </script>
 
 </body>
